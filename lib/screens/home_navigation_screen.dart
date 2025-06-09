@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dashboard_screen.dart';
-import 'day_prep_screen.dart';
+import 'plan_dag_voor_screen.dart';
 import 'grocery_list_screen.dart';
 import 'settings_screen.dart';
 
@@ -16,7 +16,7 @@ class _HomeNavigationScreenState extends State<HomeNavigationScreen> {
 
   static const List<Widget> _screens = <Widget>[
     DashboardScreen(),
-    DayPrepScreen(),
+    PlanDagVoorScreen(),
     GroceryListScreen(),
     SettingsScreen(),
   ];

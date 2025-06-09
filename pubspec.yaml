@@ -37,6 +37,7 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   easy_localization: ^3.0.1
+  flutter_local_notifications: ^16.1.0
 
 dev_dependencies:
   flutter_test:

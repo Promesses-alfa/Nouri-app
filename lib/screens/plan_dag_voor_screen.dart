@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class PlanDagVoorScreen extends StatefulWidget {
   const PlanDagVoorScreen({super.key});
@@ -9,6 +10,7 @@ class PlanDagVoorScreen extends StatefulWidget {
 }
 
 class _PlanDagVoorScreenState extends State<PlanDagVoorScreen> {
+  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
   final TextEditingController ontbijtController = TextEditingController();
   final TextEditingController lunchController = TextEditingController();
   final TextEditingController dinerController = TextEditingController();
@@ -56,6 +58,11 @@ class _PlanDagVoorScreenState extends State<PlanDagVoorScreen> {
                 await prefs.setString('snacks', snacksController.text);
                 await prefs.setString('herinneringTijd', gekozenTijd);
 
+                final tijdDelen = gekozenTijd.split(':');
+                final hour = int.parse(tijdDelen[0]);
+                final minute = int.parse(tijdDelen[1]);
+                scheduleNotification(hour, minute);
+
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(content: Text("Dagplanning opgeslagen!")),
                 );
@@ -65,6 +72,30 @@ class _PlanDagVoorScreenState extends State<PlanDagVoorScreen> {
           ],
         ),
       ),
+    );
+  }
+
+  void scheduleNotification(int hour, int minute) async {
+    const AndroidNotificationDetails androidDetails = AndroidNotificationDetails(
+      'nouri_channel',
+      'Nouri Herinneringen',
+      importance: Importance.high,
+      priority: Priority.high,
+    );
+    const NotificationDetails platformDetails = NotificationDetails(android: androidDetails);
+
+    final now = DateTime.now();
+    final scheduledTime = DateTime(now.year, now.month, now.day, hour, minute);
+
+    await flutterLocalNotificationsPlugin.zonedSchedule(
+      0,
+      'Tijd om goed voor jezelf te zorgen',
+      'Je geplande voeding of drankje staat klaar.',
+      scheduledTime.toUtc(),
+      platformDetails,
+      androidAllowWhileIdle: true,
+      uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,
+      matchDateTimeComponents: DateTimeComponents.time,
     );
   }
 }

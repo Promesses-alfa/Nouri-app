@@ -1,5 +1,3 @@
-
-
 {
   "welcome": "Welkom bij Nouri",
   "goal_question": "Wat is jouw doel?",
@@ -9,5 +7,13 @@
   "grocery_list_title": "Boodschappenlijst",
   "settings_title": "Instellingen",
   "notification_title": "Herinnering van Nouri:",
-  "ok_button": "Oké"
+  "ok_button": "Oké",
+  "preferences_food": "Voorkeuren voeding",
+  "notification_time": "Tijdstip meldingen",
+  "grocery_budget": "Budget voor boodschappen",
+  "logout": "Uitloggen",
+  "logout_confirm_title": "Weet je het zeker?",
+  "logout_confirm_message": "Wil je uitloggen en terugkeren naar het startscherm?",
+  "cancel": "Annuleren",
+  "confirm_logout": "Uitloggen"
 }

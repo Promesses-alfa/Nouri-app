@@ -25,12 +25,12 @@ class NouriApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Nouri',
-      theme: AppTheme.lightTheme,
       debugShowCheckedModeBanner: false,
-      home: const SplashScreen(),
-      localizationsDelegates: context.localizationDelegates,
-      supportedLocales: context.supportedLocales,
+      theme: AppTheme.lightTheme,
       locale: context.locale,
+      supportedLocales: context.supportedLocales,
+      localizationsDelegates: context.localizationDelegates,
+      home: const SplashScreen(),
     );
   }
 }

@@ -9,5 +9,13 @@
   "grocery_list_title": "Grocery List",
   "settings_title": "Settings",
   "notification_title": "Nouri reminder:",
-  "ok_button": "Okay"
+  "ok_button": "Okay",
+  "preferences_food": "Food Preferences",
+  "notification_time": "Notification Time",
+  "grocery_budget": "Grocery Budget",
+  "logout": "Log out",
+  "logout_confirm_title": "Are you sure?",
+  "logout_confirm_message": "Do you want to log out and return to the start screen?",
+  "cancel": "Cancel",
+  "confirm_logout": "Log out"
 }

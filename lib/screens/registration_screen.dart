@@ -73,7 +73,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    final primary = const Color(0xFFFAD2E1); // lichtroze tint
+    final primary = const Color(0xFFD9B49C); // lichtroze tint
 
     return Scaffold(
       backgroundColor: colorScheme.background,
@@ -210,9 +210,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       if (session != null && user != null) {
         final userId = user.id;
 
-        final insertRes = await Supabase.instance.client
-            .from('profiles')
-            .insert({
+        final profileData = {
           'id': userId,
           'email': controllers['email']!.text.trim(),
           'first_name': controllers['firstName']!.text.trim(),
@@ -223,7 +221,13 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           'city': controllers['city']!.text.trim(),
           'phone': controllers['phone']!.text.trim(),
           'created_at': DateTime.now().toIso8601String(),
-        });
+        };
+
+        print('➡️ Profieldata om op te slaan: $profileData');
+
+        final insertRes = await Supabase.instance.client
+            .from('profiles')
+            .insert(profileData);
         if (insertRes.error != null) {
           setState(() => errorMessage =
               'Registratiefout: ${insertRes.error!.message}');

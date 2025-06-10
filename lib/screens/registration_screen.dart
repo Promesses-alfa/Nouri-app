@@ -73,7 +73,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    final primary = colorScheme.primary;
+    final primary = const Color(0xFFFAD2E1); // lichtroze tint
 
     return Scaffold(
       backgroundColor: colorScheme.background,

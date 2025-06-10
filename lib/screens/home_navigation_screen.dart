@@ -14,12 +14,18 @@ class HomeNavigationScreen extends StatefulWidget {
 class _HomeNavigationScreenState extends State<HomeNavigationScreen> {
   int _selectedIndex = 0;
 
-  static final List<Widget> _screens = <Widget>[
-    HomeOverviewScreen(),
-    PlanDagVoorScreen(),
-    GroceryListScreen(),
-    SettingsScreen(),
-  ];
+  late final List<Widget> _screens;
+
+  @override
+  void initState() {
+    super.initState();
+    _screens = <Widget>[
+      buildHomeOverviewScreen(),
+      const PlanDagVoorScreen(),
+      const GroceryListScreen(),
+      const SettingsScreen(),
+    ];
+  }
 
   void _onItemTapped(int index) {
     setState(() {
@@ -64,9 +70,8 @@ class _HomeNavigationScreenState extends State<HomeNavigationScreen> {
       ),
     );
   }
-}
-  // HomeOverviewScreen widget (inline)
-  Widget HomeOverviewScreen() {
+
+  Widget buildHomeOverviewScreen() {
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16.0),
       child: Column(
@@ -130,3 +135,4 @@ class _HomeNavigationScreenState extends State<HomeNavigationScreen> {
       ),
     );
   }
+}

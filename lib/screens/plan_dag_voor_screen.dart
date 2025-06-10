@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:timezone/data/latest.dart' as tz;
+import 'package:timezone/timezone.dart' as tz;
 
 class PlanDagVoorScreen extends StatefulWidget {
   const PlanDagVoorScreen({super.key});
@@ -20,6 +22,12 @@ class _PlanDagVoorScreenState extends State<PlanDagVoorScreen> {
   String gekozenTijd = '07:00';
 
   @override
+  void initState() {
+    super.initState();
+    tz.initializeTimeZones();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -31,6 +39,11 @@ class _PlanDagVoorScreenState extends State<PlanDagVoorScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            const SizedBox(height: 8),
+            Text("Voor morgen plan je vooruit om gezonder te leven en minder stress te ervaren.",
+              style: TextStyle(fontSize: 14, color: Colors.grey),
+            ),
+            const SizedBox(height: 24),
             const Text("Voer je voeding in voor morgen", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
             const SizedBox(height: 16),
             TextField(controller: ontbijtController, decoration: const InputDecoration(labelText: "Ontbijt")),
@@ -66,8 +79,18 @@ class _PlanDagVoorScreenState extends State<PlanDagVoorScreen> {
                 final minute = int.parse(tijdDelen[1]);
                 scheduleNotification(hour, minute);
 
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text("Dagplanning opgeslagen!")),
+                showDialog(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                    title: const Text("Dagplanning opgeslagen"),
+                    content: const Text("Je krijgt morgen een herinnering om je voeding te volgen."),
+                    actions: [
+                      TextButton(
+                        onPressed: () => Navigator.of(context).pop(),
+                        child: const Text("Oké"),
+                      ),
+                    ],
+                  ),
                 );
               },
               child: const Text("Opslaan"),
@@ -87,14 +110,14 @@ class _PlanDagVoorScreenState extends State<PlanDagVoorScreen> {
     );
     const NotificationDetails platformDetails = NotificationDetails(android: androidDetails);
 
-    final now = DateTime.now();
-    final scheduledTime = DateTime(now.year, now.month, now.day, hour, minute);
+    final now = tz.TZDateTime.now(tz.local);
+    final scheduledTime = tz.TZDateTime(tz.local, now.year, now.month, now.day, hour, minute);
 
     await flutterLocalNotificationsPlugin.zonedSchedule(
       0,
       'Tijd om goed voor jezelf te zorgen',
       'Je geplande voeding of drankje staat klaar.',
-      scheduledTime.toUtc(),
+      scheduledTime,
       platformDetails,
       androidAllowWhileIdle: true,
       uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,

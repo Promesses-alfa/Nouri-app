@@ -42,7 +42,7 @@ class _PlanDagVoorScreenState extends State<PlanDagVoorScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Lottie.asset('assets/morning_animation.json', height: 150),
-            Text("Je dag begint goed!", style: Theme.of(context).textTheme.headline6),
+            Text("Je dag begint goed!", style: Theme.of(context).textTheme.titleLarge),
             const SizedBox(height: 8),
             Text("Voor morgen plan je vooruit om gezonder te leven en minder stress te ervaren.",
               style: TextStyle(fontSize: 14, color: Colors.grey),

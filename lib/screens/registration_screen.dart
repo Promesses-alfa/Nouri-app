@@ -88,75 +88,97 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           child: Center(
             child: ConstrainedBox(
               constraints: const BoxConstraints(maxWidth: 500),
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  children: [
-                    _buildTextField(
-                        'firstName', 'Voornaam',
-                        primary: primary),
-                    _buildTextField(
-                        'lastName', 'Achternaam',
-                        primary: primary),
-                    _buildTextField(
-                        'street', 'Straat',
-                        primary: primary),
-                    _buildTextField(
-                        'houseNumber', 'Huisnummer',
-                        type: TextInputType.number,
-                        primary: primary),
-                    _buildTextField(
-                        'postalCode', 'Postcode',
-                        primary: primary),
-                    _buildTextField(
-                        'city', 'Woonplaats',
-                        primary: primary),
-                    _buildTextField(
-                        'phone', 'Telefoonnummer',
-                        type: TextInputType.phone,
-                        primary: primary),
-                    _buildTextField(
-                        'email', 'E-mailadres',
-                        type: TextInputType.emailAddress,
-                        primary: primary),
-                    _buildTextField(
-                        'password', 'Wachtwoord',
-                        obscure: true,
-                        primary: primary),
-                    CheckboxListTile(
-                      activeColor: primary,
-                      title: const Text('Ik ben geen robot'),
-                      value: isHuman,
-                      onChanged: (v) =>
-                          setState(() => isHuman = v!),
-                    ),
-                    if (errorMessage != null) ...[
-                      const SizedBox(height: 8),
-                      Text(
-                        errorMessage!,
-                        style: TextStyle(color: colorScheme.error),
-                      ),
-                    ],
-                    const SizedBox(height: 16),
-                    SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: primary,
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 16),
-                          shape: RoundedRectangleBorder(
-                              borderRadius:
-                                  BorderRadius.circular(12)),
+              child: Card(
+                elevation: 4,
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                color: Colors.white,
+                child: Padding(
+                  padding: const EdgeInsets.all(24),
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      children: [
+                        _buildTextField(
+                            'firstName', 'Voornaam',
+                            primary: primary),
+                        _buildTextField(
+                            'lastName', 'Achternaam',
+                            primary: primary),
+                        _buildTextField(
+                            'street', 'Straat',
+                            primary: primary),
+                        _buildTextField(
+                            'houseNumber', 'Huisnummer',
+                            type: TextInputType.number,
+                            primary: primary),
+                        _buildTextField(
+                            'postalCode', 'Postcode',
+                            primary: primary),
+                        _buildTextField(
+                            'city', 'Woonplaats',
+                            primary: primary),
+                        _buildTextField(
+                            'phone', 'Telefoonnummer',
+                            type: TextInputType.phone,
+                            primary: primary),
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 12),
+                          child: TextFormField(
+                            controller: controllers['email'],
+                            keyboardType: TextInputType.emailAddress,
+                            decoration: _inputDecoration('E-mailadres', primary),
+                            validator: (v) {
+                              if (v == null || v.trim().isEmpty) {
+                                return 'Vul E-mailadres in';
+                              }
+                              final emailRegex = RegExp(r'^[\w\-\.]+@([\w\-]+\.)+[\w\-]{2,4}$');
+                              if (!emailRegex.hasMatch(v.trim())) {
+                                return 'Ongeldig e-mailadres';
+                              }
+                              return null;
+                            },
+                          ),
                         ),
-                        onPressed: _submit,
-                        child: const Text(
-                          'Account aanmaken',
-                          style: TextStyle(fontSize: 16),
+                        _buildTextField(
+                            'password', 'Wachtwoord',
+                            obscure: true,
+                            primary: primary),
+                        CheckboxListTile(
+                          activeColor: primary,
+                          title: const Text('Ik ben geen robot'),
+                          value: isHuman,
+                          onChanged: (v) =>
+                              setState(() => isHuman = v!),
                         ),
-                      ),
+                        if (errorMessage != null) ...[
+                          const SizedBox(height: 8),
+                          Text(
+                            errorMessage!,
+                            style: TextStyle(color: colorScheme.error),
+                          ),
+                        ],
+                        const SizedBox(height: 16),
+                        SizedBox(
+                          width: double.infinity,
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: primary,
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 16),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius:
+                                      BorderRadius.circular(12)),
+                            ),
+                            onPressed: _submit,
+                            child: const Text(
+                              'Account aanmaken',
+                              style: TextStyle(fontSize: 16),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
+                  ),
                 ),
               ),
             ),

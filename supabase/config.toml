@@ -1,0 +1,7 @@
+project_id = "jstsvfuyriludksxvsig"
+
+[functions.flow-coach-notifier]
+enabled = true
+verify_jwt = true
+import_map = "./functions/flow-coach-notifier/deno.json"
+entrypoint = "./functions/flow-coach-notifier/index.ts"

@@ -180,12 +180,12 @@ class DagSectie extends StatefulWidget {
   final TextEditingController controller;
 
   const DagSectie({
-    Key? key,
+    super.key,
     required this.titel,
     required this.icoon,
     required this.suggesties,
     required this.controller,
-  }) : super(key: key);
+  });
 
   @override
   State<DagSectie> createState() => _DagSectieState();

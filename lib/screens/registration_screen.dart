@@ -76,7 +76,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     final primary = const Color(0xFFD9B49C); // lichtroze tint
 
     return Scaffold(
-      backgroundColor: colorScheme.background,
+      backgroundColor: colorScheme.surface,
       appBar: AppBar(
         title: const Text('Registreren'),
         backgroundColor: primary,

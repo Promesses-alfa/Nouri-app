@@ -28,9 +28,10 @@ class SplashScreen extends StatelessWidget {
               const SizedBox(height: 40),
               ElevatedButton.icon(
                 onPressed: () {
-                  Navigator.pushReplacement(
+                  Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(builder: (_) => const DashboardScreen()),
+                    (route) => false,
                   );
                 },
                 icon: const Icon(Icons.apple),
@@ -44,9 +45,10 @@ class SplashScreen extends StatelessWidget {
               const SizedBox(height: 16),
               ElevatedButton.icon(
                 onPressed: () {
-                  Navigator.pushReplacement(
+                  Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(builder: (_) => const DashboardScreen()),
+                    (route) => false,
                   );
                 },
                 icon: const Icon(Icons.g_mobiledata),

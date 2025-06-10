@@ -47,7 +47,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Jouw dag met Nouri")),
+      appBar: AppBar(
+        title: const Text("Jouw dag met Nouri"),
+        automaticallyImplyLeading: false,
+      ),
       body: Padding(
         padding: const EdgeInsets.all(24),
         child: Column(

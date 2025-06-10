@@ -22,7 +22,10 @@ class _PlanDagVoorScreenState extends State<PlanDagVoorScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Plan je dag voor")),
+      appBar: AppBar(
+        title: const Text("Plan je dag voor"),
+        automaticallyImplyLeading: true,
+      ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(24.0),
         child: Column(

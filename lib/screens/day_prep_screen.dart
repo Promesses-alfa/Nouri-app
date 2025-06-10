@@ -6,7 +6,10 @@ class DayPrepScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Avondvoorbereiding")),
+      appBar: AppBar(
+        title: const Text("Avondvoorbereiding"),
+        automaticallyImplyLeading: true,
+      ),
       body: const Center(
         child: Text("Plan hier je voeding en hydratatie voor morgen."),
       ),

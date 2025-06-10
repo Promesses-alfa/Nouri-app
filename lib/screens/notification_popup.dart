@@ -6,15 +6,21 @@ class NotificationPopup extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
-      title: const Text("Nouri herinnert je:"),
-      content: Text(message),
-      actions: [
-        TextButton(
-          child: const Text("Oké"),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
-      ],
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Notificatie"),
+        automaticallyImplyLeading: true,
+      ),
+      body: AlertDialog(
+        title: const Text("Nouri herinnert je:"),
+        content: Text(message),
+        actions: [
+          TextButton(
+            child: const Text("Oké"),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+        ],
+      ),
     );
   }
 }

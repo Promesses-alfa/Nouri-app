@@ -6,7 +6,10 @@ class GroceryListScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Boodschappenlijst")),
+      appBar: AppBar(
+        title: const Text("Boodschappenlijst"),
+        automaticallyImplyLeading: true,
+      ),
       body: ListView(
         children: const [
           ListTile(title: Text("Havermout")),

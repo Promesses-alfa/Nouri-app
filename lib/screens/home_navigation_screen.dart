@@ -30,6 +30,12 @@ class _HomeNavigationScreenState extends State<HomeNavigationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          ['Vandaag', 'Voorbereiding', 'Boodschappen', 'Instellingen'][_selectedIndex],
+        ),
+        automaticallyImplyLeading: false,
+      ),
       body: _screens[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
         selectedItemColor: const Color(0xFFE2B6AC),

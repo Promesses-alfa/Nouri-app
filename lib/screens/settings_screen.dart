@@ -8,7 +8,10 @@ class SettingsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("settings_title".tr())),
+      appBar: AppBar(
+        title: Text("settings_title".tr()),
+        automaticallyImplyLeading: true,
+      ),
       body: ListView(
         children: [
           ListTile(title: Text("goal_question".tr())),

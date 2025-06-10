@@ -213,8 +213,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
             .insert({
           'id': userId,
           'email': controllers['email']!.text.trim(),
-          'first_name':
-              controllers['firstName']!.text.trim(),
+          'firstName':
+              controllers['first_name']!.text.trim(),
           'last_name':
               controllers['lastName']!.text.trim(),
           'street': controllers['street']!.text.trim(),

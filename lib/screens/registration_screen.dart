@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:nouri_app/screens/dashboard_screen.dart';
+import 'home_navigation_screen.dart';
 
 class RegistrationScreen extends StatefulWidget {
   const RegistrationScreen({super.key});
@@ -55,7 +55,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                               Navigator.of(context).pop();
                               Navigator.pushReplacement(
                                 context,
-                                MaterialPageRoute(builder: (_) => const DashboardScreen()),
+                                MaterialPageRoute(builder: (_) => const HomeNavigationScreen()),
                               );
                             },
                             child: const Text("Verder"),

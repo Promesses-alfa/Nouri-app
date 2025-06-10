@@ -10,152 +10,148 @@ class RegistrationScreen extends StatefulWidget {
 }
 
 class _RegistrationScreenState extends State<RegistrationScreen> {
-  final TextEditingController firstNameController = TextEditingController();
-  final TextEditingController lastNameController = TextEditingController();
-  final TextEditingController streetController = TextEditingController();
-  final TextEditingController houseNumberController = TextEditingController();
-  final TextEditingController postalCodeController = TextEditingController();
-  final TextEditingController cityController = TextEditingController();
-  final TextEditingController phoneController = TextEditingController();
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final _formKey = GlobalKey<FormState>();
   bool isHuman = false;
+  String? errorMessage;
+
+  final Map<String, TextEditingController> controllers = {
+    'firstName': TextEditingController(),
+    'lastName': TextEditingController(),
+    'street': TextEditingController(),
+    'houseNumber': TextEditingController(),
+    'postalCode': TextEditingController(),
+    'city': TextEditingController(),
+    'phone': TextEditingController(),
+    'email': TextEditingController(),
+    'password': TextEditingController(),
+  };
+
+  @override
+  void dispose() {
+    for (final controller in controllers.values) {
+      controller.dispose();
+    }
+    super.dispose();
+  }
+
+  InputDecoration _inputDecoration(String label) {
+    return InputDecoration(
+      labelText: label,
+      border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+      filled: true,
+      fillColor: Colors.grey[100],
+    );
+  }
+
+  Widget _buildTextField(String key, String label, {bool obscure = false, TextInputType? type}) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 16),
+      child: TextFormField(
+        controller: controllers[key],
+        obscureText: obscure,
+        keyboardType: type,
+        decoration: _inputDecoration(label),
+        validator: (value) => value == null || value.isEmpty ? 'Vul $label in' : null,
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         title: const Text('Registreren'),
-        automaticallyImplyLeading: true,
+        backgroundColor: colorScheme.primary,
+        foregroundColor: Colors.white,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(24.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            children: [
-              TextFormField(
-                controller: firstNameController,
-                decoration: const InputDecoration(labelText: 'Voornaam'),
-                validator: (value) =>
-                    value != null && value.isNotEmpty ? null : 'Vul uw voornaam in',
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(24),
+        child: Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 500),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                children: [
+                  _buildTextField('firstName', 'Voornaam'),
+                  _buildTextField('lastName', 'Achternaam'),
+                  _buildTextField('street', 'Straat'),
+                  _buildTextField('houseNumber', 'Huisnummer'),
+                  _buildTextField('postalCode', 'Postcode'),
+                  _buildTextField('city', 'Woonplaats'),
+                  _buildTextField('phone', 'Telefoonnummer', type: TextInputType.phone),
+                  _buildTextField('email', 'E-mailadres', type: TextInputType.emailAddress),
+                  _buildTextField('password', 'Wachtwoord', obscure: true),
+                  CheckboxListTile(
+                    title: const Text("Ik ben geen robot"),
+                    value: isHuman,
+                    onChanged: (val) => setState(() => isHuman = val ?? false),
+                  ),
+                  const SizedBox(height: 16),
+                  if (errorMessage != null)
+                    Text(
+                      errorMessage!,
+                      style: const TextStyle(color: Colors.red),
+                    ),
+                  const SizedBox(height: 16),
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                      ),
+                      onPressed: _submit,
+                      child: const Text('Account aanmaken', style: TextStyle(fontSize: 16)),
+                    ),
+                  ),
+                ],
               ),
-              const SizedBox(height: 16),
-              TextFormField(
-                controller: lastNameController,
-                decoration: const InputDecoration(labelText: 'Achternaam'),
-                validator: (value) =>
-                    value != null && value.isNotEmpty ? null : 'Vul uw achternaam in',
-              ),
-              const SizedBox(height: 16),
-              TextFormField(
-                controller: streetController,
-                decoration: const InputDecoration(labelText: 'Straat'),
-                validator: (value) =>
-                    value != null && value.isNotEmpty ? null : 'Vul uw straat in',
-              ),
-              const SizedBox(height: 16),
-              TextFormField(
-                controller: houseNumberController,
-                decoration: const InputDecoration(labelText: 'Huisnummer'),
-                validator: (value) =>
-                    value != null && value.isNotEmpty ? null : 'Vul uw huisnummer in',
-              ),
-              const SizedBox(height: 16),
-              TextFormField(
-                controller: postalCodeController,
-                decoration: const InputDecoration(labelText: 'Postcode'),
-                validator: (value) =>
-                    value != null && value.isNotEmpty ? null : 'Vul uw postcode in',
-              ),
-              const SizedBox(height: 16),
-              TextFormField(
-                controller: cityController,
-                decoration: const InputDecoration(labelText: 'Woonplaats'),
-                validator: (value) =>
-                    value != null && value.isNotEmpty ? null : 'Vul uw woonplaats in',
-              ),
-              const SizedBox(height: 16),
-              TextFormField(
-                controller: phoneController,
-                decoration: const InputDecoration(labelText: 'Telefoonnummer'),
-                validator: (value) =>
-                    value != null && value.isNotEmpty ? null : 'Vul uw telefoonnummer in',
-              ),
-              const SizedBox(height: 16),
-              TextFormField(
-                controller: emailController,
-                decoration: const InputDecoration(labelText: 'E-mailadres'),
-                validator: (value) =>
-                    value != null && value.contains('@') ? null : 'Ongeldig e-mailadres',
-              ),
-              const SizedBox(height: 16),
-              TextFormField(
-                controller: passwordController,
-                obscureText: true,
-                decoration: const InputDecoration(labelText: 'Wachtwoord'),
-                validator: (value) =>
-                    value != null && value.length >= 6 ? null : 'Minimaal 6 tekens vereist',
-              ),
-              const SizedBox(height: 16),
-              CheckboxListTile(
-                title: const Text("Ik ben geen robot"),
-                value: isHuman,
-                onChanged: (val) => setState(() => isHuman = val ?? false),
-              ),
-              const SizedBox(height: 16),
-              ElevatedButton(
-                onPressed: () async {
-                  if (!isHuman) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Bevestig alstublieft dat u geen robot bent')),
-                    );
-                    return;
-                  }
-                  if (_formKey.currentState!.validate()) {
-                    try {
-                      final response = await Supabase.instance.client.auth.signUp(
-                        email: emailController.text,
-                        password: passwordController.text,
-                      );
-
-                      if (response.user != null) {
-                        await Supabase.instance.client.from('profiles').insert({
-                          'id': response.user!.id,
-                          'email': emailController.text,
-                          'first_name': firstNameController.text,
-                          'last_name': lastNameController.text,
-                          'street': streetController.text,
-                          'house_number': houseNumberController.text,
-                          'postal_code': postalCodeController.text,
-                          'city': cityController.text,
-                          'phone': phoneController.text,
-                          'created_at': DateTime.now().toIso8601String(),
-                        });
-
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(builder: (_) => const HomeNavigationScreen()),
-                        );
-                      } else {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Registratie vereist e-mailbevestiging')),
-                        );
-                      }
-                    } catch (e) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('Registratiefout: ${e.toString()}')),
-                      );
-                    }
-                  }
-                },
-                child: const Text('Account aanmaken'),
-              ),
-            ],
+            ),
           ),
         ),
       ),
     );
+  }
+
+  Future<void> _submit() async {
+    if (!_formKey.currentState!.validate()) return;
+    if (!isHuman) {
+      setState(() => errorMessage = 'Bevestig dat je geen robot bent');
+      return;
+    }
+
+    try {
+      final response = await Supabase.instance.client.auth.signUp(
+        email: controllers['email']!.text,
+        password: controllers['password']!.text,
+      );
+
+      final user = response.user;
+      if (user != null) {
+        await Supabase.instance.client.from('profiles').insert({
+          'id': user.id,
+          'email': controllers['email']!.text,
+          'first_name': controllers['firstName']!.text,
+          'last_name': controllers['lastName']!.text,
+          'street': controllers['street']!.text,
+          'house_number': controllers['houseNumber']!.text,
+          'postal_code': controllers['postalCode']!.text,
+          'city': controllers['city']!.text,
+          'phone': controllers['phone']!.text,
+          'created_at': DateTime.now().toIso8601String(),
+        });
+
+        if (!mounted) return;
+        Navigator.pushReplacement(context, MaterialPageRoute(builder: (_) => const HomeNavigationScreen()));
+      } else {
+        setState(() => errorMessage = 'Registratie vereist e-mailbevestiging');
+      }
+    } catch (e) {
+      setState(() => errorMessage = 'Registratiefout: ${e.toString()}');
+    }
   }
 }

@@ -13,6 +13,11 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
 
+  await Supabase.initialize(
+    url: 'https://jstsvfuyriludksxvsig.supabase.co',
+    anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpzdHN2ZnV5cmlsdWRrc3h2c2lnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDk1Mzg1NDgsImV4cCI6MjA2NTExNDU0OH0.j0uwf9eIYXyACLLqcmTnC59fAGyaQXtOmG4zpE7Vnkw',
+  );
+
   const initializationSettingsAndroid =
       AndroidInitializationSettings('@mipmap/ic_launcher');
 
@@ -63,11 +68,6 @@ void main() async {
   }
 
   await checkAndShowNotifications();
-
-  await Supabase.initialize(
-    url: 'https://jstsvfuyriludksxvsig.supabase.co',
-    anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpzdHN2ZnV5cmlsdWRrc3h2c2lnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDk1Mzg1NDgsImV4cCI6MjA2NTExNDU0OH0.j0uwf9eIYXyACLLqcmTnC59fAGyaQXtOmG4zpE7Vnkw',
-  );
 
   runApp(
     EasyLocalization(

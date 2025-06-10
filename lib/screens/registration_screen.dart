@@ -15,11 +15,11 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   String? errorMessage;
 
   final Map<String, TextEditingController> controllers = {
-    'firstName': TextEditingController(),
-    'lastName': TextEditingController(),
+    'first_name': TextEditingController(),
+    'last_name': TextEditingController(),
     'street': TextEditingController(),
-    'houseNumber': TextEditingController(),
-    'postalCode': TextEditingController(),
+    'house_number': TextEditingController(),
+    'postal_code': TextEditingController(),
     'city': TextEditingController(),
     'phone': TextEditingController(),
     'email': TextEditingController(),
@@ -99,20 +99,20 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     child: Column(
                       children: [
                         _buildTextField(
-                            'firstName', 'Voornaam',
+                            'first_name', 'Voornaam',
                             primary: primary),
                         _buildTextField(
-                            'lastName', 'Achternaam',
+                            'last_name', 'Achternaam',
                             primary: primary),
                         _buildTextField(
                             'street', 'Straat',
                             primary: primary),
                         _buildTextField(
-                            'houseNumber', 'Huisnummer',
+                            'house_number', 'Huisnummer',
                             type: TextInputType.number,
                             primary: primary),
                         _buildTextField(
-                            'postalCode', 'Postcode',
+                            'postal_code', 'Postcode',
                             primary: primary),
                         _buildTextField(
                             'city', 'Woonplaats',
@@ -213,11 +213,11 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         final profileData = {
           'id': userId,
           'email': controllers['email']!.text.trim(),
-          'first_name': controllers['firstName']!.text.trim(),
-          'last_name': controllers['lastName']!.text.trim(),
+          'first_name': controllers['first_name']!.text.trim(),
+          'last_name': controllers['last_name']!.text.trim(),
           'street': controllers['street']!.text.trim(),
-          'house_number': controllers['houseNumber']!.text.trim(),
-          'postal_code': controllers['postalCode']!.text.trim(),
+          'house_number': controllers['house_number']!.text.trim(),
+          'postal_code': controllers['postal_code']!.text.trim(),
           'city': controllers['city']!.text.trim(),
           'phone': controllers['phone']!.text.trim(),
           'created_at': DateTime.now().toIso8601String(),

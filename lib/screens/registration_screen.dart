@@ -189,6 +189,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   }
 
   Future<void> _submit() async {
+    
     if (!_formKey.currentState!.validate()) return;
     if (!isHuman) {
       setState(() =>
@@ -202,13 +203,16 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         password: controllers['password']!.text.trim(),
       );
 
-      final user = resp.user;
-      if (user != null) {
-        // Insert profile row (RLS-policy moet toestaan id = user.id)
+      // Haal de huidige sessie op en lees het user ID
+      final session = Supabase.instance.client.auth.currentSession;
+      final userId = session?.user.id;
+
+      if (userId != null) {
         final insertRes = await Supabase.instance.client
             .from('profiles')
+  // 👈 dit logt de volledige input
             .insert({
-          'id': user.id,
+          'id': userId,
           'email': controllers['email']!.text.trim(),
           'first_name':
               controllers['firstName']!.text.trim(),
@@ -224,7 +228,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           'created_at':
               DateTime.now().toIso8601String(),
         });
-
+print('Invoer profieldata: $insertRes'); 
         if (insertRes.error != null) {
           setState(() => errorMessage =
               'Registratiefout: ${insertRes.error!.message}');
@@ -239,9 +243,11 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   const HomeNavigationScreen()),
         );
       } else {
-        setState(() => errorMessage =
-            'Registratie vereist e-mailbevestiging');
+        setState(() =>
+          errorMessage = 'Kan gebruikers-ID niet ophalen, probeer opnieuw in te loggen'
+        );
       }
+      
     } on PostgrestException catch (e) {
       setState(() => errorMessage =
           'Registratiefout: ${e.message}');

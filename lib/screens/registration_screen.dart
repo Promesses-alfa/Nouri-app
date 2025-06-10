@@ -28,8 +28,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
 
   @override
   void dispose() {
-    for (final controller in controllers.values) {
-      controller.dispose();
+    for (final c in controllers.values) {
+      c.dispose();
     }
     super.dispose();
   }
@@ -63,9 +63,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         controller: controllers[key],
         obscureText: obscure,
         keyboardType: type,
-        decoration: _inputDecoration(label, primary ?? Colors.blue),
-        validator: (value) =>
-            value == null || value.isEmpty ? 'Vul $label in' : null,
+        decoration: _inputDecoration(label, primary!),
+        validator: (v) =>
+            v == null || v.isEmpty ? 'Vul $label in' : null,
       ),
     );
   }
@@ -92,25 +92,43 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 key: _formKey,
                 child: Column(
                   children: [
-                    _buildTextField('firstName', 'Voornaam', primary: primary),
-                    _buildTextField('lastName', 'Achternaam', primary: primary),
-                    _buildTextField('street', 'Straat', primary: primary),
-                    _buildTextField('houseNumber', 'Huisnummer',
-                        type: TextInputType.number, primary: primary),
-                    _buildTextField('postalCode', 'Postcode', primary: primary),
-                    _buildTextField('city', 'Woonplaats', primary: primary),
-                    _buildTextField('phone', 'Telefoonnummer',
-                        type: TextInputType.phone, primary: primary),
-                    _buildTextField('email', 'E-mailadres',
-                        type: TextInputType.emailAddress, primary: primary),
-                    _buildTextField('password', 'Wachtwoord',
-                        obscure: true, primary: primary),
+                    _buildTextField(
+                        'firstName', 'Voornaam',
+                        primary: primary),
+                    _buildTextField(
+                        'lastName', 'Achternaam',
+                        primary: primary),
+                    _buildTextField(
+                        'street', 'Straat',
+                        primary: primary),
+                    _buildTextField(
+                        'houseNumber', 'Huisnummer',
+                        type: TextInputType.number,
+                        primary: primary),
+                    _buildTextField(
+                        'postalCode', 'Postcode',
+                        primary: primary),
+                    _buildTextField(
+                        'city', 'Woonplaats',
+                        primary: primary),
+                    _buildTextField(
+                        'phone', 'Telefoonnummer',
+                        type: TextInputType.phone,
+                        primary: primary),
+                    _buildTextField(
+                        'email', 'E-mailadres',
+                        type: TextInputType.emailAddress,
+                        primary: primary),
+                    _buildTextField(
+                        'password', 'Wachtwoord',
+                        obscure: true,
+                        primary: primary),
                     CheckboxListTile(
                       activeColor: primary,
-                      title: const Text("Ik ben geen robot"),
+                      title: const Text('Ik ben geen robot'),
                       value: isHuman,
-                      onChanged: (val) =>
-                          setState(() => isHuman = val ?? false),
+                      onChanged: (v) =>
+                          setState(() => isHuman = v!),
                     ),
                     if (errorMessage != null) ...[
                       const SizedBox(height: 8),
@@ -125,9 +143,11 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           backgroundColor: primary,
-                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 16),
                           shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12)),
+                              borderRadius:
+                                  BorderRadius.circular(12)),
                         ),
                         onPressed: _submit,
                         child: const Text(
@@ -149,31 +169,38 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   Future<void> _submit() async {
     if (!_formKey.currentState!.validate()) return;
     if (!isHuman) {
-      setState(() => errorMessage = 'Bevestig dat je geen robot bent');
+      setState(() =>
+          errorMessage = 'Bevestig dat je geen robot bent');
       return;
     }
 
     try {
-      final response = await Supabase.instance.client.auth.signUp(
+      final resp = await Supabase.instance.client.auth.signUp(
         email: controllers['email']!.text.trim(),
         password: controllers['password']!.text.trim(),
       );
 
-      final user = response.user;
+      final user = resp.user;
       if (user != null) {
+        // Insert profile row (RLS-policy moet toestaan id = user.id)
         final insertRes = await Supabase.instance.client
             .from('profiles')
             .insert({
           'id': user.id,
           'email': controllers['email']!.text.trim(),
-          'first_name': controllers['firstName']!.text.trim(),
-          'last_name': controllers['lastName']!.text.trim(),
+          'first_name':
+              controllers['firstName']!.text.trim(),
+          'last_name':
+              controllers['lastName']!.text.trim(),
           'street': controllers['street']!.text.trim(),
-          'house_number': controllers['houseNumber']!.text.trim(),
-          'postal_code': controllers['postalCode']!.text.trim(),
+          'house_number':
+              controllers['houseNumber']!.text.trim(),
+          'postal_code':
+              controllers['postalCode']!.text.trim(),
           'city': controllers['city']!.text.trim(),
           'phone': controllers['phone']!.text.trim(),
-          'created_at': DateTime.now().toIso8601String(),
+          'created_at':
+              DateTime.now().toIso8601String(),
         });
 
         if (insertRes.error != null) {
@@ -186,18 +213,19 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-              builder: (_) => const HomeNavigationScreen()),
+              builder: (_) =>
+                  const HomeNavigationScreen()),
         );
       } else {
-        setState(() =>
-            errorMessage = 'Registratie vereist e-mailbevestiging');
+        setState(() => errorMessage =
+            'Registratie vereist e-mailbevestiging');
       }
     } on PostgrestException catch (e) {
       setState(() => errorMessage =
           'Registratiefout: ${e.message}');
     } catch (e) {
-      setState(() =>
-          errorMessage = 'Er is iets misgegaan: ${e.toString()}');
+      setState(() => errorMessage =
+          'Er is iets misgegaan: ${e.toString()}');
     }
   }
 }

@@ -78,55 +78,75 @@ class _HomeNavigationScreenState extends State<HomeNavigationScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Text(
-            'Welkom bij Nouri 👋',
+            'Goedemorgen 👋',
             style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 8),
           const Text(
-            'Jouw welzijns-assistent voor voeding, hydratatie en structuur.',
+            'Hier is je overzicht voor vandaag.',
             style: TextStyle(fontSize: 16, color: Colors.grey),
           ),
           const SizedBox(height: 24),
+
+          // Watermomenten
           Card(
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
             elevation: 4,
             child: ListTile(
-              leading: const Icon(Icons.restaurant_menu, color: Color(0xFFE2B6AC)),
-              title: const Text('Bekijk je dagplanning'),
-              subtitle: const Text('Wat staat er vandaag op het menu?'),
+              leading: const Icon(Icons.water_drop, color: Color(0xFFE2B6AC)),
+              title: const Text('Waterinname'),
+              subtitle: const Text('2 van 5 glazen vandaag'),
+              trailing: const CircularProgressIndicator(value: 0.4),
               onTap: () {
-                setState(() {
-                  _selectedIndex = 1;
-                });
+                // toekomstige navigatie naar waterdetails
               },
             ),
           ),
           const SizedBox(height: 16),
+
+          // Rustmoment
+          Card(
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            elevation: 4,
+            child: ListTile(
+              leading: const Icon(Icons.self_improvement, color: Color(0xFFE2B6AC)),
+              title: const Text('Rustmoment'),
+              subtitle: const Text('Laatste pauze: 09:30 – volgende om 11:00'),
+              onTap: () {
+                // toekomstige navigatie naar rustdata
+              },
+            ),
+          ),
+          const SizedBox(height: 16),
+
+          // Actie van de dag
+          Card(
+            color: Colors.green[50],
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            elevation: 4,
+            child: ListTile(
+              leading: const Icon(Icons.check_circle_outline, color: Color(0xFFE2B6AC)),
+              title: const Text('Actie: Neem ontbijt'),
+              subtitle: const Text('Voorgesteld om 08:30 – nog niet afgevinkt'),
+              onTap: () {
+                // toekomstige actie-tracking
+              },
+            ),
+          ),
+          const SizedBox(height: 16),
+
+          // Boodschappenlijst
           Card(
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
             elevation: 4,
             child: ListTile(
               leading: const Icon(Icons.shopping_cart, color: Color(0xFFE2B6AC)),
               title: const Text('Boodschappenlijst'),
-              subtitle: const Text('Slim en automatisch gegenereerd'),
+              subtitle: const Text('3 producten toegevoegd'),
+              trailing: const Icon(Icons.chevron_right),
               onTap: () {
                 setState(() {
                   _selectedIndex = 2;
-                });
-              },
-            ),
-          ),
-          const SizedBox(height: 16),
-          Card(
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-            elevation: 4,
-            child: ListTile(
-              leading: const Icon(Icons.settings, color: Color(0xFFE2B6AC)),
-              title: const Text('Instellingen'),
-              subtitle: const Text('Notificaties, taal, account'),
-              onTap: () {
-                setState(() {
-                  _selectedIndex = 3;
                 });
               },
             ),

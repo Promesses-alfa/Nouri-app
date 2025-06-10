@@ -210,12 +210,11 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       if (userId != null) {
         final insertRes = await Supabase.instance.client
             .from('profiles')
-  // 👈 dit logt de volledige input
             .insert({
           'id': userId,
           'email': controllers['email']!.text.trim(),
           'first_name':
-              controllers['first_name']!.text.trim(),
+              controllers['firstName']!.text.trim(),
           'last_name':
               controllers['lastName']!.text.trim(),
           'street': controllers['street']!.text.trim(),
@@ -228,7 +227,6 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           'created_at':
               DateTime.now().toIso8601String(),
         });
-print('Invoer profieldata: $insertRes'); 
         if (insertRes.error != null) {
           setState(() => errorMessage =
               'Registratiefout: ${insertRes.error!.message}');

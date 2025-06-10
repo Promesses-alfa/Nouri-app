@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../services/supabase_service.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
+import 'package:lottie/lottie.dart';
 
 class PlanDagVoorScreen extends StatefulWidget {
   const PlanDagVoorScreen({super.key});
@@ -39,17 +41,40 @@ class _PlanDagVoorScreenState extends State<PlanDagVoorScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            Lottie.asset('assets/morning_animation.json', height: 150),
+            Text("Je dag begint goed!", style: Theme.of(context).textTheme.headline6),
             const SizedBox(height: 8),
             Text("Voor morgen plan je vooruit om gezonder te leven en minder stress te ervaren.",
               style: TextStyle(fontSize: 14, color: Colors.grey),
             ),
             const SizedBox(height: 24),
-            const Text("Voer je voeding in voor morgen", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+            DagSectie(
+              titel: "Ochtend",
+              icoon: Icons.wb_sunny,
+              suggesties: ["Fruit", "Yoghurt", "Koffie"],
+              controller: ontbijtController,
+            ),
             const SizedBox(height: 16),
-            TextField(controller: ontbijtController, decoration: const InputDecoration(labelText: "Ontbijt")),
-            TextField(controller: lunchController, decoration: const InputDecoration(labelText: "Lunch")),
-            TextField(controller: dinerController, decoration: const InputDecoration(labelText: "Diner")),
-            TextField(controller: snacksController, decoration: const InputDecoration(labelText: "Tussendoortjes")),
+            DagSectie(
+              titel: "Middag",
+              icoon: Icons.wb_cloudy,
+              suggesties: ["Salade", "Broodje", "Sap"],
+              controller: lunchController,
+            ),
+            const SizedBox(height: 16),
+            DagSectie(
+              titel: "Avond",
+              icoon: Icons.nights_stay,
+              suggesties: ["Pasta", "Vis", "Groenten"],
+              controller: dinerController,
+            ),
+            const SizedBox(height: 16),
+            DagSectie(
+              titel: "Tussendoortjes",
+              icoon: Icons.fastfood,
+              suggesties: ["Noten", "Yoghurt", "Fruit"],
+              controller: snacksController,
+            ),
             const SizedBox(height: 32),
             const Text("Kies tijdstip voor herinneringen", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
             const SizedBox(height: 8),
@@ -64,39 +89,61 @@ class _PlanDagVoorScreenState extends State<PlanDagVoorScreen> {
               }).toList(),
               onChanged: (waarde) => setState(() => gekozenTijd = waarde!),
             ),
-            const SizedBox(height: 32),
-            ElevatedButton(
-              onPressed: () async {
-                final prefs = await SharedPreferences.getInstance();
-                await prefs.setString('ontbijt', ontbijtController.text);
-                await prefs.setString('lunch', lunchController.text);
-                await prefs.setString('diner', dinerController.text);
-                await prefs.setString('snacks', snacksController.text);
-                await prefs.setString('herinneringTijd', gekozenTijd);
-
-                final tijdDelen = gekozenTijd.split(':');
-                final hour = int.parse(tijdDelen[0]);
-                final minute = int.parse(tijdDelen[1]);
-                scheduleNotification(hour, minute);
-
-                showDialog(
-                  context: context,
-                  builder: (context) => AlertDialog(
-                    title: const Text("Dagplanning opgeslagen"),
-                    content: const Text("Je krijgt morgen een herinnering om je voeding te volgen."),
-                    actions: [
-                      TextButton(
-                        onPressed: () => Navigator.of(context).pop(),
-                        child: const Text("Oké"),
-                      ),
-                    ],
-                  ),
-                );
-              },
-              child: const Text("Opslaan"),
-            ),
+            const SizedBox(height: 80),
           ],
         ),
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        icon: const Icon(Icons.play_arrow),
+        label: const Text("Start je dag"),
+        onPressed: () async {
+          final now = DateTime.now();
+          final morgen = DateTime(now.year, now.month, now.day).add(Duration(days: 1));
+
+          await SupabaseService().saveDayPlan(
+            timeBlock: 'morning',
+            items: ontbijtController.text.split(',').map((e) => e.trim()).toList(),
+            repeat: true,
+            date: morgen,
+          );
+          await SupabaseService().saveDayPlan(
+            timeBlock: 'afternoon',
+            items: lunchController.text.split(',').map((e) => e.trim()).toList(),
+            repeat: true,
+            date: morgen,
+          );
+          await SupabaseService().saveDayPlan(
+            timeBlock: 'evening',
+            items: dinerController.text.split(',').map((e) => e.trim()).toList(),
+            repeat: true,
+            date: morgen,
+          );
+          await SupabaseService().saveDayPlan(
+            timeBlock: 'snacks',
+            items: snacksController.text.split(',').map((e) => e.trim()).toList(),
+            repeat: true,
+            date: morgen,
+          );
+
+          final tijdDelen = gekozenTijd.split(':');
+          final hour = int.parse(tijdDelen[0]);
+          final minute = int.parse(tijdDelen[1]);
+          scheduleNotification(hour, minute);
+
+          showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+              title: const Text("Dagplanning opgeslagen"),
+              content: const Text("Je planning is nu opgeslagen in Supabase en je krijgt morgen een herinnering."),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: const Text("Oké"),
+                ),
+              ],
+            ),
+          );
+        },
       ),
     );
   }
@@ -122,6 +169,81 @@ class _PlanDagVoorScreenState extends State<PlanDagVoorScreen> {
       androidAllowWhileIdle: true,
       uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,
       matchDateTimeComponents: DateTimeComponents.time,
+    );
+  }
+}
+
+class DagSectie extends StatefulWidget {
+  final String titel;
+  final IconData icoon;
+  final List<String> suggesties;
+  final TextEditingController controller;
+
+  const DagSectie({
+    Key? key,
+    required this.titel,
+    required this.icoon,
+    required this.suggesties,
+    required this.controller,
+  }) : super(key: key);
+
+  @override
+  State<DagSectie> createState() => _DagSectieState();
+}
+
+class _DagSectieState extends State<DagSectie> {
+  bool repeatFlag = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      elevation: 2,
+      child: Padding(
+        padding: const EdgeInsets.all(12.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Icon(widget.icoon, size: 28),
+                const SizedBox(width: 8),
+                Text(widget.titel, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+              ],
+            ),
+            const SizedBox(height: 8),
+            Wrap(
+              spacing: 8,
+              children: widget.suggesties.map((suggestie) {
+                return ActionChip(
+                  label: Text(suggestie),
+                  onPressed: () {
+                    final text = widget.controller.text;
+                    final insertText = suggestie + (text.isEmpty ? '' : ', ');
+                    setState(() {
+                      widget.controller.text = insertText + text;
+                      widget.controller.selection = TextSelection.fromPosition(TextPosition(offset: widget.controller.text.length));
+                    });
+                  },
+                );
+              }).toList(),
+            ),
+            const SizedBox(height: 8),
+            TextField(
+              controller: widget.controller,
+              decoration: InputDecoration(
+                labelText: widget.titel,
+                border: const OutlineInputBorder(),
+              ),
+              maxLines: null,
+            ),
+            SwitchListTile(
+              title: const Text("Altijd dit plannen?"),
+              value: repeatFlag,
+              onChanged: (value) => setState(() => repeatFlag = value),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

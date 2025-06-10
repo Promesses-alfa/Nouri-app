@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'screens/splash_screen.dart';
 import 'themes/app_theme.dart';
 
@@ -23,6 +23,11 @@ void main() async {
   );
 
   await flutterLocalNotificationsPlugin.initialize(initializationSettings);
+
+  await Supabase.initialize(
+    url: 'https://jstsvfuyriludksxvsig.supabase.co',
+    anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpzdHN2ZnV5cmlsdWRrc3h2c2lnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDk1Mzg1NDgsImV4cCI6MjA2NTExNDU0OH0.j0uwf9eIYXyACLLqcmTnC59fAGyaQXtOmG4zpE7Vnkw',
+  );
 
   runApp(
     EasyLocalization(

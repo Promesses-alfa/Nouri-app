@@ -204,28 +204,25 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       );
 
       // Haal de huidige sessie op en lees het user ID
-      final session = Supabase.instance.client.auth.currentSession;
-      final userId = session?.user.id;
+      final user = resp.user;
+      final session = resp.session;
 
-      if (userId != null) {
+      if (session != null && user != null) {
+        final userId = user.id;
+
         final insertRes = await Supabase.instance.client
             .from('profiles')
             .insert({
           'id': userId,
           'email': controllers['email']!.text.trim(),
-          'firstName':
-              controllers['first_name']!.text.trim(),
-          'last_name':
-              controllers['lastName']!.text.trim(),
+          'first_name': controllers['firstName']!.text.trim(),
+          'last_name': controllers['lastName']!.text.trim(),
           'street': controllers['street']!.text.trim(),
-          'house_number':
-              controllers['houseNumber']!.text.trim(),
-          'postal_code':
-              controllers['postalCode']!.text.trim(),
+          'house_number': controllers['houseNumber']!.text.trim(),
+          'postal_code': controllers['postalCode']!.text.trim(),
           'city': controllers['city']!.text.trim(),
           'phone': controllers['phone']!.text.trim(),
-          'created_at':
-              DateTime.now().toIso8601String(),
+          'created_at': DateTime.now().toIso8601String(),
         });
         if (insertRes.error != null) {
           setState(() => errorMessage =
@@ -241,9 +238,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   const HomeNavigationScreen()),
         );
       } else {
-        setState(() =>
-          errorMessage = 'Kan gebruikers-ID niet ophalen, probeer opnieuw in te loggen'
-        );
+        setState(() {
+          errorMessage = 'Bevestig je e-mail via de link die is verstuurd voordat je kunt inloggen.';
+        });
       }
       
     } on PostgrestException catch (e) {

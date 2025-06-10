@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nouri_app/screens/dashboard_screen.dart';
+import 'package:nouri_app/screens/home_navigation_screen.dart';
 import 'package:nouri_app/screens/registration_screen.dart';
 
 class SplashScreen extends StatelessWidget {
@@ -30,7 +31,7 @@ class SplashScreen extends StatelessWidget {
                 onPressed: () {
                   Navigator.pushAndRemoveUntil(
                     context,
-                    MaterialPageRoute(builder: (_) => const DashboardScreen()),
+                    MaterialPageRoute(builder: (_) => const HomeNavigationScreen()),
                     (route) => false,
                   );
                 },
@@ -47,7 +48,7 @@ class SplashScreen extends StatelessWidget {
                 onPressed: () {
                   Navigator.pushAndRemoveUntil(
                     context,
-                    MaterialPageRoute(builder: (_) => const DashboardScreen()),
+                    MaterialPageRoute(builder: (_) => const HomeNavigationScreen()),
                     (route) => false,
                   );
                 },

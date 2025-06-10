@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'dashboard_screen.dart';
+// import 'dashboard_screen.dart';
 import 'plan_dag_voor_screen.dart';
 import 'grocery_list_screen.dart';
 import 'settings_screen.dart';
@@ -14,8 +14,8 @@ class HomeNavigationScreen extends StatefulWidget {
 class _HomeNavigationScreenState extends State<HomeNavigationScreen> {
   int _selectedIndex = 0;
 
-  static const List<Widget> _screens = <Widget>[
-    DashboardScreen(),
+  static final List<Widget> _screens = <Widget>[
+    HomeOverviewScreen(),
     PlanDagVoorScreen(),
     GroceryListScreen(),
     SettingsScreen(),
@@ -32,7 +32,7 @@ class _HomeNavigationScreenState extends State<HomeNavigationScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          ['Vandaag', 'Voorbereiding', 'Boodschappen', 'Instellingen'][_selectedIndex],
+          ['Home', 'Voorbereiding', 'Boodschappen', 'Instellingen'][_selectedIndex],
         ),
         automaticallyImplyLeading: false,
       ),
@@ -45,8 +45,8 @@ class _HomeNavigationScreenState extends State<HomeNavigationScreen> {
         type: BottomNavigationBarType.fixed,
         items: const [
           BottomNavigationBarItem(
-            icon: Icon(Icons.today),
-            label: 'Vandaag',
+            icon: Icon(Icons.home),
+            label: 'Home',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.nightlight),
@@ -65,3 +65,68 @@ class _HomeNavigationScreenState extends State<HomeNavigationScreen> {
     );
   }
 }
+  // HomeOverviewScreen widget (inline)
+  Widget HomeOverviewScreen() {
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            'Welkom bij Nouri 👋',
+            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 8),
+          const Text(
+            'Jouw welzijns-assistent voor voeding, hydratatie en structuur.',
+            style: TextStyle(fontSize: 16, color: Colors.grey),
+          ),
+          const SizedBox(height: 24),
+          Card(
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            elevation: 4,
+            child: ListTile(
+              leading: const Icon(Icons.restaurant_menu, color: Color(0xFFE2B6AC)),
+              title: const Text('Bekijk je dagplanning'),
+              subtitle: const Text('Wat staat er vandaag op het menu?'),
+              onTap: () {
+                setState(() {
+                  _selectedIndex = 1;
+                });
+              },
+            ),
+          ),
+          const SizedBox(height: 16),
+          Card(
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            elevation: 4,
+            child: ListTile(
+              leading: const Icon(Icons.shopping_cart, color: Color(0xFFE2B6AC)),
+              title: const Text('Boodschappenlijst'),
+              subtitle: const Text('Slim en automatisch gegenereerd'),
+              onTap: () {
+                setState(() {
+                  _selectedIndex = 2;
+                });
+              },
+            ),
+          ),
+          const SizedBox(height: 16),
+          Card(
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            elevation: 4,
+            child: ListTile(
+              leading: const Icon(Icons.settings, color: Color(0xFFE2B6AC)),
+              title: const Text('Instellingen'),
+              subtitle: const Text('Notificaties, taal, account'),
+              onTap: () {
+                setState(() {
+                  _selectedIndex = 3;
+                });
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }

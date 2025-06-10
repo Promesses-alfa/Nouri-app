@@ -60,7 +60,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
       child: TextFormField(
-        controller: controllers[key],
+        controller: controllers[key]!,
         obscureText: obscure,
         keyboardType: type,
         decoration: _inputDecoration(label, primary!),
